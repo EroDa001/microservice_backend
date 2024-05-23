@@ -1,0 +1,89 @@
+server:
+  port: 7777
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8888/eureka/
+
+
+spring:
+  spring:
+    main:
+      web-application-type: reactive
+
+  logging:
+    level:
+      com.netflix.discovery: DEBUG
+      org.springframework.cloud.netflix.eureka: DEBUG
+      org.springframework.web.client.RestTemplate: DEBUG
+
+  application:
+    name: ms-gateway
+
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+      routes:
+        - id: authentication-route
+          uri: lb://ms-authentification
+          predicates:
+            - Path=/auth-srv/**
+          filters:
+            - RewritePath=/auth-srv/(?<remaining>.*), /$\{remaining}
+
+        - id: command-products-route
+          uri: lb://ms-command-products
+          predicates:
+            - Path=/products-srv/command/**
+          filters:
+           - RewritePath=/products-srv/command/(?<remaining>.*), /$\{remaining}
+
+        - id: query-products-route
+          uri: lb://ms-query-products
+          predicates:
+            - Path=/products-srv/query/**
+          filters:
+            - RewritePath=/products-srv/query/(?<remaining>.*), /$\{remaining}
+
+        - id: announcements-route
+          uri: lb://ms-announcements
+          predicates:
+            - Path=/announcement-srv/**
+          filters:
+            - RewritePath=/announcement-srv/(?<remaining>.*), /$\{remaining}
+
+
+#        - id: route1
+#          predicates:
+#            - Path=/products-service/**
+#          filters:
+#            - RewritePath=/products-service/(?<s>.*), /${s}
+#            - name: CircuitBreaker
+#              args:
+#                name: FallBabk-formation
+#                fallbackuri: forward:/defaultFormations
+#
+#          uri: lb://ms-command-products
