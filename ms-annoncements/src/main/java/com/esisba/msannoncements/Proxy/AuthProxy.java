@@ -12,7 +12,7 @@ public interface AuthProxy {
     @PostMapping("/api/v1/auth/verify-token")
     public JwtDto validateToken(@RequestParam String token);
 
-    @GetMapping("/api/v1/user-infos")
+    @GetMapping("/api/v1/user-details")
     public UserInfosDto getUser(@RequestHeader("Authorization") String authorizationHeader);
 
 }

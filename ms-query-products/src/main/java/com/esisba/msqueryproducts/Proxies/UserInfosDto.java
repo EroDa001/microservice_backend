@@ -12,7 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfosDto {
-    private String fullname;
-    private String email;
+    private Integer userId;
+
     private List<Permission> permissions;
+
+    private Integer companyId;
 }

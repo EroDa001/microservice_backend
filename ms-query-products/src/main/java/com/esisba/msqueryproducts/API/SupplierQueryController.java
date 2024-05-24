@@ -79,11 +79,9 @@ public class SupplierQueryController {
             String token = authorizationHeader.substring(7);
 
             JwtDto authResponse = authProxy.validateToken(token);
-
             if(authResponse.getIsValid()){
 
                 UserInfosDto user = authProxy.getUser(authorizationHeader);
-
                 if(user.getPermissions().contains(Permission.INVENTORY)) {
 
                     PageRequest pagination = PageRequest.of(page , size , Sort.by("categoryId"));
