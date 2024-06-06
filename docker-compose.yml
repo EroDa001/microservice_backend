@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  registry:
+    image: drone27/registry:latest
+    ports:
+      - "8888:8888"
+
+  gateway:
+    image: drone27/gateway:latest
+    ports:
+      - "7777:7777"
+    depends_on:
+      - ms-announcements
+      - ms-authentification
+      - ms-command-products
+      - ms-query-products
+      - registry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
+
+  files-upload:
+    image: drone27/file_upload:latest
+    ports:
+      - "8084:8084"
+
+  ms-announcements:
+    image: drone27/ms-announcements:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db-mongo
+      - registry
+    environment:
+      - SPRING_DATA_MONGODB_HOST=db-mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=announcementsService
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
+
+  ms-authentification:
+    image: drone27/security:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db-mysql
+      - registry
+    environment:
+      - MYSQL_HOST=db-mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=authdb
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
+
+  ms-command-products:
+    image: drone27/ms-command-products:latest
+    ports:
+      - "8081:8081"
+    depends_on:
+      - registry
+      - axon-server
+    environment:
+      - AXONIQ_AXONSERVER_SERVERS=axon-server:8124
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
+
+  ms-query-products:
+    image: drone27/ms-query-products:latest
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db-mongo
+      - registry
+    environment:
+      - SPRING_DATA_MONGODB_HOST=db-mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=productsService
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
+
+  db-mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-mysql-data:/var/lib/mysql
+
+  db-mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-mongo-data:/data/db
+
+  axon-server:
+    image: axoniq/axonserver:latest
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+    volumes:
+      - axon-server-data:/data
+
+volumes:
+  db-mysql-data: {}
+  db-mongo-data: {}
+  axon-server-data: {}

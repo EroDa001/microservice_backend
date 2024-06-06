@@ -32,7 +32,7 @@ public class ProductsGroupProjection {
     @EventHandler
     public void AddProductsGroup(ProductsGroup_CreateEvent event){
         ProductsGroup productsGroup = new ProductsGroup(event.getProductsGroupId() , event.getName() , new ArrayList<String>(),
-                event.getCategoryId() , event.getCompanyId());
+                event.getCategoryId() , event.getCompanyId() , event.getCreatedAt());
 
         productsGroupRepository.save(productsGroup);
     }

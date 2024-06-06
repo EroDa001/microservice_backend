@@ -41,7 +41,7 @@ public class ProductsGroup_Aggregate {
 
         String newId = UUID.randomUUID().toString();
 
-        AggregateLifecycle.apply(new ProductsGroup_CreateEvent(newId, cmd.getName() , null , cmd.getCategoryId() , cmd.getCompanyId() ));
+        AggregateLifecycle.apply(new ProductsGroup_CreateEvent(newId, cmd.getName() , null , cmd.getCategoryId() , cmd.getCompanyId(), cmd.getCreatedAt() ));
     }
 
     @EventSourcingHandler

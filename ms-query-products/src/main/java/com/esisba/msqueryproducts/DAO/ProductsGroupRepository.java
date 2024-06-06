@@ -11,6 +11,7 @@ import java.util.List;
 public interface ProductsGroupRepository extends MongoRepository<ProductsGroup, String> {
     List<ProductsGroup> findProductsGroupsByCompanyIdIn(List<Integer> ids);
     Page<ProductsGroup> findProductsGroupsByCompanyId(Integer id, Pageable pageable);
+    ProductsGroup findProductsGroupByCompanyIdAndProductsGroupId(Integer idc , String idp);
 
 
 }

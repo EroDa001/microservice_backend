@@ -29,8 +29,8 @@ public class CommandController {
     @Autowired
     private CommandGateway commandGateway;
 
-    @PostMapping("category/{categoryId}/products_group")
-    public CompletableFuture<ResponseEntity<String>> createProductsGroup(@PathVariable String categoryId, @RequestBody ProductsGroupDTO body , @RequestHeader("Authorization") String authorizationHeader){
+    @PostMapping("category/{category}/products_group")
+    public CompletableFuture<ResponseEntity<String>> createProductsGroup(@PathVariable String category, @RequestBody ProductsGroupDTO body , @RequestHeader("Authorization") String authorizationHeader){
 
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             String token = authorizationHeader.substring(7);
@@ -41,20 +41,21 @@ public class CommandController {
 
                 UserInfosDto user = authProxy.getUser(authorizationHeader);
 
-                if(user.getPermissions().contains(Permission.INVENTORY)){
+                if(user.getPermissions().contains(Permission.INVENTORY) && user.getCategories().contains(category)){
 
-                CompletableFuture<String> gatewayResponse = commandGateway.send(
-                        new ProductsGroup_CreateCommand(body.getName() , null , categoryId , authResponse.getCompanyId() )
-                );
+                    LocalDateTime createdAt = LocalDateTime.now();
 
-                return gatewayResponse
-                        .thenApply(response-> ResponseEntity.ok().body("Products Group Created"))
-                        .exceptionally(ex -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error occurred: " + ex.getMessage()));
+                    CompletableFuture<String> gatewayResponse = commandGateway.send(
+                            new ProductsGroup_CreateCommand(body.getName() , null , category , authResponse.getCompanyId() , createdAt )
+                    );
 
-                }
+                    return gatewayResponse
+                            .thenApply(response-> ResponseEntity.ok().body("Products Group Created"))
+                            .exceptionally(ex -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                    .body("Error occurred: " + ex.getMessage()));
+                    }
                 else{
-                    return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.FORBIDDEN).body("Insufficient Permissions"));
+                    return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED"));
                 }
             }
             else{
@@ -123,14 +124,15 @@ public class CommandController {
 
                 if(user.getPermissions().contains(Permission.INVENTORY)){
 
-                CompletableFuture<String> gatewayResponse = commandGateway.send(
-                        new ProductsGroup_DeleteCommand(pGroupId)
-                );
-                return gatewayResponse
-                        .thenApply(response-> ResponseEntity.ok().body("Products Group Deleted"))
-                        .exceptionally(ex -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("Error occurred: " + ex.getMessage() ));
-                }
+                    CompletableFuture<String> gatewayResponse = commandGateway.send(
+                            new ProductsGroup_DeleteCommand(pGroupId)
+                    );
+                    return gatewayResponse
+                            .thenApply(response-> ResponseEntity.ok().body("Products Group Deleted"))
+                            .exceptionally(ex -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                    .body("Error occurred: " + ex.getMessage() ));
+                    }
+
                 else{
                     return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.FORBIDDEN).body("Insufficient Permissions"));
                 }

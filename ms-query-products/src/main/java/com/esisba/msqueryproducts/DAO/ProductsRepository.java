@@ -14,5 +14,4 @@ public interface ProductsRepository extends MongoRepository<Product, String> {
     <T> Page<T> findProductsByProductIdIn(List<String> ids, Pageable pageable);
 
     Page<ProductProjectionB> findProductsByProductsGroupId(String id, Pageable pageable);
-
 }

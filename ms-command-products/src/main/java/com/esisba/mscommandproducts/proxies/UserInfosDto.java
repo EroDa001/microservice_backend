@@ -17,4 +17,6 @@ public class UserInfosDto {
     private List<Permission> permissions;
 
     private Integer companyId;
+
+    private List<String> categories;
 }
