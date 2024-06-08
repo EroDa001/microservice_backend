@@ -30,11 +30,6 @@ public class ClientQueryController {
     @GetMapping("productsBySuppliers")
     public Page<ProductProjectionA> getProducts(@RequestBody Products_suppliersList body , @RequestParam int page, @RequestParam int size){
 
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-//            String token = authorizationHeader.substring(7);
-//
-
-
         List<ProductsGroup> groups = productsGroupRepository.findProductsGroupsByCompanyIdIn(body.getSuppliers());
 
         List<String> productIds = groups.stream()

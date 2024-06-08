@@ -59,7 +59,7 @@ public class SupplierQueryController {
     }
 
     @GetMapping("/myProducts")
-    public ResponseEntity<Page> getProducts(@RequestParam int page, @RequestParam int size , @RequestHeader("Authorization") String authorizationHeader){
+    public ResponseEntity<Page> getProducts(@RequestParam String filter,  @RequestParam int page, @RequestParam int size , @RequestHeader("Authorization") String authorizationHeader){
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
 
             String token = authorizationHeader.substring(7);
@@ -81,8 +81,22 @@ public class SupplierQueryController {
 
                     Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-                    return ResponseEntity.ok().body(productsRepository.findProductsByProductIdIn(productIds, pageable ));
 
+                    Page<Product> result;
+
+                    switch (filter){
+                        case "available":
+                            result = productsRepository.getAvailableProducts(productIds, pageable );
+                            break;
+                        case "out_of_stock":
+                            result = productsRepository.getOutOfStockProducts(productIds, pageable );
+                            break;
+                        default:
+                            result = productsRepository.findProductsByProductIdIn(productIds, pageable );
+                            break;
+                    }
+
+                    return ResponseEntity.ok().body(result);
                 }
                 else{
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Page.empty());

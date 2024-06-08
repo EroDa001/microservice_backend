@@ -4,6 +4,8 @@ import com.esisba.productscoreapi.embedded.Discount;
 import org.springframework.data.rest.core.config.Projection;
 import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Projection(name = "" , types = Product.class)
@@ -20,7 +22,7 @@ public interface ProductProjectionB {
     int getMinimumQuantity();
     String getReference();
 
-    float getCreatedAt();
+    LocalDateTime getCreatedAt();
 
     Discount getDiscount();
 
