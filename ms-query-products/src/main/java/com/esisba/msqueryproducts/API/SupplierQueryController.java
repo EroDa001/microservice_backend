@@ -71,7 +71,7 @@ public class SupplierQueryController {
 
                 if(user.getPermissions().contains(Permission.INVENTORY)){
 
-                    PageRequest pagination = PageRequest.of(page, size);
+                    PageRequest pagination = PageRequest.of(0, 10000);
 
                     Page<ProductsGroup> groups = productsGroupRepository.findProductsGroupsByCompanyId(authResponse.getCompanyId() , pagination);
 
@@ -79,7 +79,7 @@ public class SupplierQueryController {
                             .flatMap(group -> group.getProductsIds().stream())
                             .toList();
 
-                    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt"));
+                    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
                     return ResponseEntity.ok().body(productsRepository.findProductsByProductIdIn(productIds, pageable ));
 

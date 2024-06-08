@@ -16,11 +16,9 @@ services:
       - ms-command-products
       - ms-query-products
       - registry
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
 
   files-upload:
-    image: drone27/file_upload:latest
+    image: drone27/files-upload:latest
     ports:
       - "8084:8084"
 
@@ -31,11 +29,6 @@ services:
     depends_on:
       - db-mongo
       - registry
-    environment:
-      - SPRING_DATA_MONGODB_HOST=db-mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=announcementsService
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
 
   ms-authentification:
     image: drone27/security:latest
@@ -44,11 +37,6 @@ services:
     depends_on:
       - db-mysql
       - registry
-    environment:
-      - MYSQL_HOST=db-mysql
-      - MYSQL_PORT=3306
-      - MYSQL_DATABASE=authdb
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
 
   ms-command-products:
     image: drone27/ms-command-products:latest
@@ -57,9 +45,6 @@ services:
     depends_on:
       - registry
       - axon-server
-    environment:
-      - AXONIQ_AXONSERVER_SERVERS=axon-server:8124
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
 
   ms-query-products:
     image: drone27/ms-query-products:latest
@@ -68,11 +53,6 @@ services:
     depends_on:
       - db-mongo
       - registry
-    environment:
-      - SPRING_DATA_MONGODB_HOST=db-mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=productsService
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8888/eureka
 
   db-mysql:
     image: mysql:latest
@@ -80,6 +60,8 @@ services:
       - "3306:3306"
     volumes:
       - db-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
 
   db-mongo:
     image: mongo:latest

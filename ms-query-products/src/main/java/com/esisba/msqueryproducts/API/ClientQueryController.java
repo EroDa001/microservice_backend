@@ -41,7 +41,7 @@ public class ClientQueryController {
                 .flatMap(group -> group.getProductsIds().stream())
                 .toList();
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
 
         return productsRepository.findProductsByProductIdIn(productIds, pageable );
@@ -51,7 +51,7 @@ public class ClientQueryController {
     @GetMapping("/productsGroup/{id}/products")
     public Page<ProductProjectionB> getProductsByGroup(@PathVariable String id , @RequestParam int page, @RequestParam int size){
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         return productsRepository.findProductsByProductsGroupId(id , pageable);
     }
@@ -59,7 +59,7 @@ public class ClientQueryController {
     @GetMapping("/productsByIds")
     public Page<ProductProjectionA> getProductsById(@RequestBody Products_Ids body , @RequestParam int page, @RequestParam int size){
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         return productsRepository.findProductsByProductIdIn(body.getIds() , pageable);
     }
