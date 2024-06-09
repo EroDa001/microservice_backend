@@ -13,6 +13,7 @@ public interface ProductProjectionB {
 
     List<String> getImagePaths();
 
+    String getProductId();
     String getName();
     double getPrice();
     float getRate();

@@ -51,7 +51,7 @@ public class ClientQueryController {
         return productsRepository.findProductsByProductsGroupId(id , pageable);
     }
 
-    @GetMapping("/productsByIds")
+    @PostMapping("/productsByIds")
     public Page<ProductProjectionA> getProductsById(@RequestBody Products_Ids body , @RequestParam int page, @RequestParam int size){
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
@@ -76,5 +76,6 @@ public class ClientQueryController {
         Pageable pageable = PageRequest.of(page, size);
         return productsGroupRepository.findProductsGroupsByCompanyId(id, pageable);
     }
+
 
 }

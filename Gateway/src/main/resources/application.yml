@@ -53,6 +53,13 @@ spring:
           filters:
             - RewritePath=/auth-srv/(?<remaining>.*), /$\{remaining}
 
+        - id: orders-route
+          uri: lb://ms-orders
+          predicates:
+            - Path=/orders-srv/**
+          filters:
+            - RewritePath=/orders-srv/(?<remaining>.*), /$\{remaining}
+
         - id: command-products-route
           uri: lb://ms-command-products
           predicates:

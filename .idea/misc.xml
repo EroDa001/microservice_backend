@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/Registry/pom.xml" />
         <option value="$PROJECT_DIR$/ms-query-products/pom.xml" />
         <option value="$PROJECT_DIR$/ms-authentification/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-order/pom.xml" />
       </list>
     </option>
   </component>

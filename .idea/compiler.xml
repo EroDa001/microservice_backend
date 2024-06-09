@@ -14,6 +14,7 @@
         <module name="Registry" />
         <module name="ms-query-products" />
         <module name="Products-Core-API" />
+        <module name="ms-order" />
       </profile>
     </annotationProcessing>
   </component>
@@ -24,6 +25,7 @@
       <module name="Registry" options="-parameters" />
       <module name="ms-annoncements" options="-parameters" />
       <module name="ms-command-products" options="-parameters" />
+      <module name="ms-order" options="-parameters" />
       <module name="ms-query-products" options="-parameters" />
       <module name="security" options="-parameters" />
     </option>
