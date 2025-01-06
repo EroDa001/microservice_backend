@@ -54,6 +54,14 @@ services:
       - db-mongo
       - registry
 
+  ms-orders:
+    image: drone27/ms-orders:latest
+    ports:
+      - "8085:8085"
+    depends_on:
+      - registry
+      - db-mysql
+
   db-mysql:
     image: mysql:latest
     ports:

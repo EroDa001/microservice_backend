@@ -1,4 +1,0 @@
-FROM openjdk:17-jdk-alpine
-COPY target/ms-query-products*.jar ms-query-products.jar
-ENTRYPOINT ["java", "-jar", "/ms-query-products.jar"]
-EXPOSE 8082

@@ -1,4 +1,0 @@
-FROM openjdk:17-jdk-alpine
-COPY target/ms-command-products*.jar ms-command-products.jar
-ENTRYPOINT ["java", "-jar", "/ms-command-products.jar"]
-EXPOSE 8081

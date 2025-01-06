@@ -1,4 +1,0 @@
-FROM openjdk:17-jdk-alpine
-COPY target/ms-annoncements*.jar ms-annoncements.jar
-ENTRYPOINT ["java", "-jar", "/ms-annoncements.jar"]
-EXPOSE 8083
